@@ -147,7 +147,7 @@ With these two tools, you no longer need an XDS debugger board (LaunchPad) for f
 | Tool | Default Location |
 | ------ | ----------------- |
 | **J-Link** | `C:\Program Files\SEGGER\JLink_V844\` |
-| **GDB** | Auto-detected — checks `PATH` → `C:\ti\gcc-arm-none-eabi-*` → `C:\ST\STM32CubeIDE*` |
+| **GDB** | Auto-detected — checks `PATH` → `C:\ti\gcc-arm-none-eabi-*` |
 | **TI Tools** | `<PATH_MSP_ZEROCODE_STUDIO>\ti_cgt_arm_llvm\bin\` |
 
 Find GDB location if not in PATH:

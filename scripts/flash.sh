@@ -15,11 +15,9 @@ FIRMWARE_GDB=$(echo "$FIRMWARE_RAW" | sed 's#^/c/#C:/#')
 
 JLINK_PATH=$(cygpath -w "/c/Program Files/SEGGER/JLink_V844/JLinkGDBServer.exe")
 
-# Auto-detect GDB from common locations (TI standalone > STM32CubeIDE > PATH)
+# Auto-detect GDB from common locations (PATH > TI standalone)
 _GDB_CANDIDATES=(
-  "/c/Program Files (x86)/GNU Arm Embedded Toolchain/*/bin/arm-none-eabi-gdb.exe"
   "/c/ti/gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gdb.exe"
-  "/c/ST/STM32CubeIDE*/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.*/tools/bin/arm-none-eabi-gdb.exe"
 )
 GDB_PATH=""
 for _gdb in "${_GDB_CANDIDATES[@]}"; do
