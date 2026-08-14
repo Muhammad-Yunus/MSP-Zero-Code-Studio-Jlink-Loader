@@ -15,42 +15,42 @@
     .\convert.ps1 -Input firmware\my_app.out -Format bin -Output my_app.bin
 #>
 param(
-    [string]$Input  = "$PSScriptRoot\..\firmware\zero_code_start_ticlang.out",
+    [string]$Firmware = "$PSScriptRoot\..\firmware\zero_code_start_ticlang.out",
     [ValidateSet("hex", "bin")]
     [string]$Format = "bin",
-    [string]$Output = ""
+    [string]$OutFile = ""
 )
 
 $ErrorActionPreference = "Stop"
 
 $ToolchainDir = "C:\Users\Asus\guicomposer\runtime\gcruntime.v13\MSPZeroCodeStudio\ti_cgt_arm_llvm\bin"
-$BaseName     = [System.IO.Path]::GetFileNameWithoutExtension($Input)
+$BaseName   = [System.IO.Path]::GetFileNameWithoutExtension($Firmware)
 
-if ($Output -eq "") {
-    $Output = "$PSScriptRoot\..\$BaseName.$Format"
+if ($OutFile -eq "") {
+    $OutFile = (Resolve-Path "$PSScriptRoot\..") + "\$BaseName.$Format"
 }
 
 $TIObjcopy = "$ToolchainDir\tiarmobjcopy.exe"
 $TIHexConv = "$ToolchainDir\tiarmhex.exe"
 
-if (-not (Test-Path $Input)) {
-    Write-Error "Input file not found: $Input"
+if (-not (Test-Path $Firmware)) {
+    Write-Error "Firmware file not found: $Firmware"
     exit 1
 }
 
-Write-Host "=== Convert $Input ===" -ForegroundColor Cyan
+Write-Host "=== Convert $Firmware ===" -ForegroundColor Cyan
 Write-Host "Format : $Format"
 Write-Host "Output : $Output"
 Write-Host ""
 
 if ($Format -eq "bin") {
     Write-Host "Running tiarmobjcopy ..." -ForegroundColor Yellow
-    & $TIObjcopy -O binary $Input $Output
+    & $TIObjcopy -O binary $Firmware $OutFile
 } else {
     Write-Host "Running tiarmhex ..." -ForegroundColor Yellow
-    & $TIHexConv $Input "-o" $Output
+    & $TIHexConv $Firmware "-o" $OutFile
 }
 
-$Size = (Get-Item $Output).Length
+$Size = (Get-Item $OutFile).Length
 Write-Host ""
-Write-Host "Done! Output: $Output ($Size bytes)" -ForegroundColor Green
+Write-Host "Done! Output: $OutFile ($Size bytes)" -ForegroundColor Green

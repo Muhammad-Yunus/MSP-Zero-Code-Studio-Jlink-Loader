@@ -58,6 +58,9 @@ Write-Host "JLinkGDBServer : $JLinkPath"
 Write-Host "GDB            : $GdbPath"
 Write-Host ""
 
+# Convert Windows path to forward-slash for GDB
+$FirmwareGDB = $Firmware -replace '\\', '/'
+
 # Start JLinkGDBServer
 Write-Host "[1/2] Starting JLinkGDBServer on port $Port ..." -ForegroundColor Yellow
 $jlinkProc = Start-Process -FilePath $JLinkPath `
@@ -72,7 +75,7 @@ Write-Host "[2/2] Flashing firmware via GDB ..." -ForegroundColor Yellow
 & $GdbPath -q `
     --eval-command='set confirm off' `
     --eval-command="target extended-remote :$Port" `
-    --eval-command="file $Firmware" `
+    --eval-command="file $FirmwareGDB" `
     --eval-command='load' `
     --eval-command='kill'
 
