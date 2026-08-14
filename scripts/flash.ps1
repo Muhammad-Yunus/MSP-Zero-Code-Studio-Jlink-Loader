@@ -23,9 +23,10 @@ $ErrorActionPreference = "Stop"
 $JLinkPath = "C:\Program Files\SEGGER\JLink_V844\JLinkGDBServer.exe"
 
 # Auto-detect GDB: PATH > TI ARM GCC (bundled with CCS / MSP Zero Code Studio)
+# NOTE: MSP Zero Code Studio does NOT bundle GDB. TI ARM GCC is included with CCS installs.
 $Candidates = @(
     (Get-Command arm-none-eabi-gdb -ErrorAction SilentlyContinue).Source,
-    "C:\ti\gcc-arm-none-eabi-7-2018-q2-update\bin\arm-none-eabi-gdb.exe"
+    "C:\ti\gcc-arm-none-eabi-*/bin/arm-none-eabi-gdb.exe"
 )
 $GdbPath = $null
 foreach ($cand in $Candidates) {
