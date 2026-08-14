@@ -17,7 +17,7 @@ Flash TI `.out` (ELF) firmware from <strong>MSP Zero Code Studio</strong> to the
 
 <p align="center">
   <a href="https://www.ti.com/tool/MSP-ZERO-CODE-STUDIO"><img src="https://img.shields.io/badge/TI-MSP_Zero_Code_Studio-0099BD?style=for-the-badge&logo=texasinstruments" alt="TI MSP Zero Code Studio"></a>
-  <a href="https://www.segger.com/products/debug-probes/j-link/"><img src="https://img.shields.io/badge/J--Link-SEGGER-V8.44-52B70C?style=for-the-badge" alt="J-Link V8.44"></a>
+  <a href="https://www.segger.com/products/debug-probes/j-link/"><img src="https://img.shields.io/badge/JLink-V8.44-52B70C?style=for-the-badge" alt="J-Link V8.44"></a>
   <a href="https://github.com/WeActStudio/WeActStudio.MSPM0G3507CoreBoard/"><img src="https://img.shields.io/badge/Board-WeAct_MSPM0G3507-FF6B6B?style=for-the-badge" alt="WeAct Board"></a>
   <a href="https://developer.arm.com/architectures/cpu-architecture/m-profile"><img src="https://img.shields.io/badge/CPU-Cortex--M0%2B-0099BD?style=for-the-badge&logo=arm" alt="Cortex-M0+"></a>
 </p>
