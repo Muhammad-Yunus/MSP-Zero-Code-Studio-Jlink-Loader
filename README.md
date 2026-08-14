@@ -65,7 +65,7 @@ PORT=2332 bash scripts/flash.sh
 
 ## Firmware: ADC Sample to UART Write
 
-Folder `firmware/` berisi firmware demo dari **MSP Zero Code Studio** — contoh proyek **ADC Sample to UART Write**. Firmware ini adalah file ELF (`.out`) bersih yang diambil langsung dari folder workspace compiler, bukan hasil export (exportan通常会 korup karena byte Unicode replacement character).
+Folder `firmware/` berisi firmware demo dari **MSP Zero Code Studio** — contoh proyek **ADC Sample to UART Write**. Firmware ini adalah file ELF (`.out`) bersih yang diambil langsung dari folder workspace compiler, bukan hasil export (exportan biasanya korup karena byte Unicode replacement character).
 
 Demo ini menggambarkan cara membaca input ADC dan mengirim hasilnya via UART, cocok untuk validasi hardware sebelum flash firmware sendiri.
 
