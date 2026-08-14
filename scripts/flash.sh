@@ -15,9 +15,10 @@ FIRMWARE_GDB=$(echo "$FIRMWARE_RAW" | sed 's#^/c/#C:/#')
 
 JLINK_PATH=$(cygpath -w "/c/Program Files/SEGGER/JLink_V844/JLinkGDBServer.exe")
 
-# Auto-detect GDB from common locations (PATH > TI standalone)
+# Auto-detect GDB from common locations (PATH > TI ARM GCC bundled with CCS/MSP Zero)
 _GDB_CANDIDATES=(
-  "/c/ti/gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gdb.exe"
+  # TI ARM GCC — bundled with CCS / MSP Zero Code Studio at C:\ti\gcc-arm-none-eabi-*
+  "/c/ti/gcc-arm-none-eabi-*/bin/arm-none-eabi-gdb.exe"
 )
 GDB_PATH=""
 for _gdb in "${_GDB_CANDIDATES[@]}"; do
