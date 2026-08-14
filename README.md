@@ -4,7 +4,7 @@
 
 How-to flash file `.out` dari **MSP Zero Code Studio** (TI Clang toolchain) ke chip **MSPM0G3507** menggunakan **J-Link**.
 
-**Target Board**: [WeAct Studio MSPM0G3507 Core Board](https://www.westar.cn/)
+**Target Board**: [WeAct Studio MSPM0G3507 Core Board](https://github.com/WeActStudio/WeActStudio.MSPM0G3507CoreBoard/)
 
 ---
 
