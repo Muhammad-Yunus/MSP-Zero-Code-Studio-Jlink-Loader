@@ -4,7 +4,9 @@
   <img src="docs/Weact_Studio_MSPM0G3507_banner.png" alt="WeAct MSPM0G3507 Banner" width="100%">
 </p>
 
-> Flash TI `.out` (ELF) firmware to **MSPM0G3507** using **J-Link** — no XDS debugger required.
+<p align="center">
+Flash TI `.out` (ELF) firmware from <strong>MSP Zero Code Studio</strong> to the <strong>TI MSPM0G3507</strong> microcontroller using a <strong>J-Link</strong> debugger over <strong>SWD</strong> — eliminating the need for an XDS debug probe or LaunchPad board entirely. Includes ready-to-use scripts for flashing and firmware conversion.
+</p>
 
 <p align="center">
   <a href="https://github.com/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader"><img src="https://img.shields.io/github/license/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader?style=for-the-badge" alt="License"></a>
@@ -27,7 +29,7 @@
 <table align="center">
   <tr>
     <td align="center">
-      <img src="docs/Weact_Studio_MSPM0G3507.png" alt="WeAct MSPM0G3507 Board" width="500"><br>
+      <img src="docs/Weact_Studio_MSPM0G3507.png" alt="WeAct MSPM0G3507 Board" width="350"><br>
       <sub>WeAct Studio MSPM0G3507 Core Board</sub>
     </td>
     <td align="left" valign="top">
@@ -116,6 +118,7 @@ The `firmware/` folder contains a demo firmware from **MSP Zero Code Studio** �
 ```
 
 Example:
+
 ```
 C:\Users\<username>\guicomposer\runtime\gcruntime.v13\MSPZeroCodeStudio\workspace\zero_code_start_ticlang\Debug\zero_code_start_ticlang.out
 ```
@@ -142,12 +145,13 @@ With these two tools, you no longer need an XDS debugger board (LaunchPad) for f
 ## Prerequisites
 
 | Tool | Default Location |
-|------|-----------------|
+| ------ | ----------------- |
 | **J-Link** | `C:\Program Files\SEGGER\JLink_V844\` |
 | **GDB** | STM32CubeIDE `...\tools\bin\arm-none-eabi-gdb.exe` |
 | **TI Tools** | `<PATH_MSP_ZEROCODE_STUDIO>\ti_cgt_arm_llvm\bin\` |
 
 Find GDB location if not in PATH:
+
 ```powershell
 where.exe arm-none-eabi-gdb
 ```
@@ -165,7 +169,7 @@ Files exported from MSP Zero Code Studio contain `0xEF 0xBF 0xBD` bytes (Unicode
 ## Troubleshooting
 
 | Problem | Solution |
-|---------|----------|
+| --------- | ---------- |
 | `Failed to open file` in JLink | Use a path without spaces, or copy the file to the repo root |
 | `invalid e_shentsize in ELF header` | Exported file is corrupted. Copy from the workspace Debug folder |
 | `loadfile` crash in tiarmhex | Use `tiarmobjcopy` to generate `.bin`, then flash via GDB |
