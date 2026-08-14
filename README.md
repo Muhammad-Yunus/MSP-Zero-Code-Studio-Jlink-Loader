@@ -14,7 +14,7 @@ How-to flash file `.out` dari **MSP Zero Code Studio** (TI Clang toolchain) ke c
 |----------|-------------|
 | **Target Board** | WeAct Studio MSPM0G3507 Core Board |
 | **MCU** | TI MSPM0G3507 (Cortex-M0+, 512KB Flash, 128KB RAM) |
-| **Programmer** | J-Link (SEGGER), interface SWD |
+| **Programmer** | J-Link (SEGGER), terhubung via SWD (2-pin: SWCLK, SWDIO) |
 
 ![WeAct MSPM0G3507 Board](docs/Weact_Studio_MSPM0G3507.png =500)
 
