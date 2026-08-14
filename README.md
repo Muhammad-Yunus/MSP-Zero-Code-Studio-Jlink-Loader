@@ -135,7 +135,7 @@ To generate your own `.out` firmware, make sure the following tools are installe
 | **[J-Link Software](https://www.segger.com/downloads/jlink/)** | [segger.com/downloads/jlink](https://www.segger.com/downloads/jlink/) |
 | **[GNU Arm Embedded Toolchain](https://gitlab.arm.com/tooling/gnu-toolchains-for-arm/-/tree/releases/15.3.rel1)** | [gitlab.arm.com/tooling/gnu-toolchains-for-arm](https://gitlab.arm.com/tooling/gnu-toolchains-for-arm/-/tree/releases/15.3.rel1) |
 
-With these two tools, you no longer need an XDS debugger board (LaunchPad) for flashing — simply connect J-Link to the SWD header on the board.
+With these tools, you no longer need an XDS debugger board (LaunchPad) for flashing — simply connect J-Link to the SWD header on the board.
 
 <p align="center">
   <img src="docs/msp_zero_code_studio.png" alt="MSP Zero Code Studio" width="600">
