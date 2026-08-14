@@ -21,9 +21,30 @@ param(
 $ErrorActionPreference = "Stop"
 
 $JLinkPath = "C:\Program Files\SEGGER\JLink_V844\JLinkGDBServer.exe"
-$GdbPath   = Get-Command arm-none-eabi-gdb -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source
+
+# Auto-detect GDB: PATH > TI standalone > STM32CubeIDE
+$Candidates = @(
+    # From PATH
+    (Get-Command arm-none-eabi-gdb -ErrorAction SilentlyContinue).Source,
+    # TI standalone ARM GCC (common on Windows)
+    "${env:ProgramFiles(x86)}\GNU Arm Embedded Toolchain\*\bin\arm-none-eabi-gdb.exe",
+    "C:\ti\gcc-arm-none-eabi-7-2018-q2-update\bin\arm-none-eabi-gdb.exe",
+    # STM32CubeIDE
+    "C:\ST\STM32CubeIDE*\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.\*\tools\bin\arm-none-eabi-gdb.exe"
+)
+$GdbPath = $null
+foreach ($cand in $Candidates) {
+    if ($cand) {
+        $matches = Get-Item $cand -ErrorAction SilentlyContinue
+        if ($matches) {
+            $GdbPath = $matches[0].FullName
+            break
+        }
+    }
+}
 if (-not $GdbPath) {
-    $GdbPath = "C:\ST\STM32CubeIDE_2.0.0\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.100.202509120712\tools\bin\arm-none-eabi-gdb.exe"
+    Write-Warning "arm-none-eabi-gdb not found. Install GNU ARM Embedded Toolchain or STM32CubeIDE."
+    exit 1
 }
 
 if (-not (Test-Path $Firmware)) {

@@ -14,7 +14,26 @@ FIRMWARE_WIN=$(cygpath -w "$FIRMWARE_RAW" | sed 's|/|\\|g')
 FIRMWARE_GDB=$(echo "$FIRMWARE_RAW" | sed 's#^/c/#C:/#')
 
 JLINK_PATH=$(cygpath -w "/c/Program Files/SEGGER/JLink_V844/JLinkGDBServer.exe")
-GDB_PATH=$(cygpath -w "/c/ST/STM32CubeIDE_2.0.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.100.202509120712/tools/bin/arm-none-eabi-gdb.exe")
+
+# Auto-detect GDB from common locations (TI standalone > STM32CubeIDE > PATH)
+_GDB_CANDIDATES=(
+  "/c/Program Files (x86)/GNU Arm Embedded Toolchain/*/bin/arm-none-eabi-gdb.exe"
+  "/c/ti/gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gdb.exe"
+  "/c/ST/STM32CubeIDE*/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.*/tools/bin/arm-none-eabi-gdb.exe"
+)
+GDB_PATH=""
+for _gdb in "${_GDB_CANDIDATES[@]}"; do
+  for _match in $_gdb; do
+    if [ -f "$_match" ]; then
+      GDB_PATH=$(cygpath -w "$_match")
+      break 2
+    fi
+  done
+done
+if [ -z "$GDB_PATH" ]; then
+  _which_gdb=$(which arm-none-eabi-gdb 2>/dev/null)
+  GDB_PATH=$(cygpath -w "$_which_gdb" 2>/dev/null || echo "")
+fi
 PORT="${PORT:-2331}"
 
 if [ ! -f "$FIRMWARE_RAW" ]; then
