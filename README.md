@@ -4,175 +4,103 @@ How-to flash file `.out` dari **MSP Zero Code Studio** (TI Clang toolchain) ke c
 
 **Target Board**: [WeAct Studio MSPM0G3507 Core Board](https://www.westar.cn/)
 
-Panduan ini menggunakan **MSP Zero Code Studio** sebagai compiler dan **J-Link** sebagai programmer/debugger.
-
-> Semua contoh menggunakan **PowerShell**. Untuk CMD, hapus backtick `` ` `` dan ganti baris baru dengan `^`.
-
 ---
 
-## Hardware yang Digunakan
+## Hardware
 
 | Komponen | Spesifikasi |
 |----------|-------------|
 | **Target Board** | WeAct Studio MSPM0G3507 Core Board |
 | **MCU** | TI MSPM0G3507 (Cortex-M0+, 512KB Flash, 128KB RAM) |
-| **Debugger/Programmer** | J-Link (SEGGER) |
-| **Interface** | SWD (2-pin: SWCLK, SWDIO) |
-| **Toolchain** | MSP Zero Code Studio (TI ARM Clang) |
+| **Programmer** | J-Link (SEGGER), interface SWD |
 
 ---
 
-## Quick Start (Flash Langsung)
+## Quick Start
 
-Jika kamu hanya ingin flash secepatnya dan sudah punya file `.out` bersih dari workspace Debug:
+```powershell
+# Terminal 1
+git clone https://github.com/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader.git
+cd MSP-Zero-Code-Studio-Jlink-Loader
 
-**Terminal 1**: Mulai JLinkGDBServer
+# Jalankan script flash
+bash scripts/flash.sh
 
-````powershell
-& "<PATH_JLINK>\JLinkGDBServer.exe" -device MSPM0G3507 -if SWD -speed auto -port 2331 -singlerun
-````
-
-**Terminal 2** (tunggu ~3 detik lalu jalankan):
-
-````powershell
-& "<PATH_GDB>\arm-none-eabi-gdb.exe" -q `
-  --eval-command='set confirm off' `
-  --eval-command='target extended-remote :2331' `
-  --eval-command='file <path_ke_file>/<nama_project>.out' `
-  --eval-command='load' `
-  --eval-command='kill'
-````
-
-Output sukses akan terlihat seperti:
-
-```
-Loading section .intvecs, size 0xc0 lma 0x0
-Loading section .text, size 0x728 lma 0xc0
-Loading section .rodata, size 0x18 lma 0x7e8
-Loading section .cinit, size 0x18 lma 0x800
-Start address 0x00000744, load size 2072
-Transfer rate: 1011 KB/sec, 518 bytes/write.
-[Inferior 1 (Remote target) killed]
+# Atau gunakan PowerShell
+.\scripts\flash.ps1
 ```
 
 ---
 
-## Mengetahui File `.out` yang Bisa Dipakai
+## Cara Pakai Script
 
-File `.out` hasil **export** dari MSP Zero Code Studio adalah format TI-specific ELF yang **korup** — byte `0xEF 0xBF 0xBD` (Unicode replacement character) tersebar di seluruh file sehingga tools standar tidak bisa membacanya.
+Semua script otomatis mendeteksi path toolchain TI, J-Link, dan GDB yang terinstall. Cukup jalankan dari root repo:
 
-### Sumber file asli yang valid
+### Flash Firmware
 
-File ELF asli yang bersih ada di folder workspace compiler bawaan MSP Zero Code Studio:
+```powershell
+# Flash file default (firmware/zero_code_start_ticlang.out)
+bash scripts/flash.sh
+.\scripts\flash.ps1
+```
+
+```powershell
+# Flash file custom
+bash scripts/flash.sh firmware/my_app.out
+.\scripts\flash.ps1 -Firmware firmware\my_app.out
+```
+
+### Konversi `.out` ke `.hex` atau `.bin`
+
+```powershell
+# Konversi ke HEX
+bash scripts/convert.sh firmware/my_app.out hex
+.\scripts\convert.ps1 -Format hex
+
+# Konversi ke BIN
+bash scripts/convert.sh firmware/my_app.out bin
+.\scripts\convert.ps1 -Format bin
+```
+
+### Ubah Port GDB Server
+
+```powershell
+PORT=2332 bash scripts/flash.sh
+```
+
+---
+
+## Prasyarat
+
+Toolscript ini memerlukan tool berikut (semua sudah tersedia di sistem yang digunakan):
+
+| Tool | Lokasi Bawaan |
+|------|--------------|
+| **J-Link** | `C:\Program Files\SEGGER\JLink_V844\` |
+| **GDB** | STM32CubeIDE `...\tools\bin\arm-none-eabi-gdb.exe` |
+| **TI Tools** | `<PATH_MSP_ZEROCODE_STUDIO>\ti_cgt_arm_llvm\bin\` |
+
+Cari lokasi GDB jika tidak di PATH:
+```powershell
+where.exe arm-none-eabi-gdb
+```
+
+---
+
+## Pengetahuan Penting
+
+### Kenapa file `.out` hasil export korup?
+
+File `.out` yang di-export dari MSP Zero Code Studio mengandung byte `0xEF 0xBF 0xBD` (Unicode replacement character) yang membuat header ELF rusak. Gunakan file asli dari folder workspace compiler:
 
 ```
 <PATH_MSP_ZEROCODE_STUDIO>\workspace\<nama_project>\Debug\<nama_project>.out
 ```
 
-> Ganti `<PATH_MSP_ZEROCODE_STUDIO>` dengan lokasi instalasi MSP Zero Code Studio kamu.
-> Contoh di Windows: `C:\Users\<username>\guicomposer\runtime\gcruntime.v13\MSPZeroCodeStudio`
-
----
-
-## Konversi `.out` ke `.hex` atau `.bin`
-
-Jika perlu convert ke format lain (misalnya untuk dicatat atau dipakai tool lain):
-
-### Carilah tool converter bawaan TI
-
-Tool ini berada di folder toolchain TI dalam MSP Zero Code Studio:
-
+Contoh:
 ```
-<PATH_MSP_ZEROCODE_STUDIO>\ti_cgt_arm_llvm\bin\
+C:\Users\<username>\guicomposer\runtime\gcruntime.v13\MSPZeroCodeStudio\workspace\<nama_project>\Debug\<nama_project>.out
 ```
-
-Tool yang tersedia:
-- `tiarmhex.exe` — ELF ke Intel HEX
-- `tiarmobjcopy.exe` — ELF ke berbagai format (termasuk raw binary)
-
-Cari di sistem jika lokasinya tidak diketahui:
-````powershell
-Get-ChildItem "C:\" -Recurse -Filter "tiarmhex.exe" -ErrorAction SilentlyContinue | Select-Object -First 3 FullName
-Get-ChildItem "C:\" -Recurse -Filter "tiarmobjcopy.exe" -ErrorAction SilentlyContinue | Select-Object -First 3 FullName
-````
-
-### Konversi ke Intel HEX
-
-```bash
-<PATH_TOOLCHAIN>\tiarmhex.exe \
-  <PATH_WORKSPACE>/workspace/<nama_project>/Debug/<nama_project>.out \
-  -o <nama_project>.hex
-```
-
-### Konversi ke Raw Binary
-
-```bash
-<PATH_TOOLCHAIN>\tiarmobjcopy.exe \
-  -O binary \
-  <PATH_WORKSPACE>/workspace/<nama_project>/Debug/<nama_project>.out \
-  <nama_project>.bin
-```
-
----
-
-## Flash ke MSPM0G3507 via J-Link
-
-### Persiapan
-
-Pastikan J-Link terhubung dan device terdeteksi di JLink Commander:
-
-- **Device**: `MSPM0G3507`
-- **Interface**: `SWD`
-- **License**: `FlashDL`
-
-### Cara 1 — GDB (paling reliable)
-
-Lihat **Quick Start** di atas.
-
-### Cara 2 — Script JLink Commander
-
-Buat file `flash.cmd`:
-
-```
-device MSPM0G3507
-speed auto
-h
-loadfile <path_ke_file>/<nama_project>.out
-exit
-```
-
-Jalankan:
-
-````powershell
-& "<PATH_JLINK>\JLink.exe" -CommandFile flash.cmd
-````
-
-> **Catatan**: `loadfile` bisa gagal jika file `.out` exportan korup. Gunakan file dari workspace Debug.
-
-### Cara 3 — Menggunakan File HEX
-
-````powershell
-& "<PATH_JLINK>\JLink.exe" -device MSPM0G3507 -if SWD -speed auto -autoconnect 1 -h
-````
-
-Lalu di prompt interaktif J-Link:
-
-```
-loadfile <path_ke_file>/<nama_project>.hex
-```
-
----
-
-## Variable Path yang Digunakan
-
-| Variable | Keterangan | Contoh |
-|----------|-----------|--------|
-| `<PATH_MSP_ZEROCODE_STUDIO>` | Lokasi instalasi MSP Zero Code Studio | `C:\Users\<user>\guicomposer\runtime\gcruntime.v13\MSPZeroCodeStudio` |
-| `<PATH_TOOLCHAIN>` | Sama dengan di atas | — |
-| `<PATH_JLINK>` | Lokasi instalasi J-Link | `C:\Program Files\SEGGER\JLink_V844` |
-| `<PATH_GDB>` | Lokasi ARM GCC / GNU ARM Embedded Toolchain | `C:\...\STM32CubeIDE\...\bin` atau `$env:PATH` |
-
-**Tips**: Cari lokasi GDB dengan: `where.exe arm-none-eabi-gdb` (Windows) atau `which arm-none-eabi-gdb` (WSL/Linux).
 
 ---
 
@@ -180,12 +108,9 @@ loadfile <path_ke_file>/<nama_project>.hex
 
 | Masalah | Solusi |
 |---------|--------|
-| `Failed to open file` di JLink | Gunakan path tanpa spasi, atau copy file ke direktori root (mis. Desktop) |
-| `invalid e_shentsize in ELF header` | File `.out` exportan korup. Gunakan file asli dari folder `workspace/*/Debug/` |
+| `Failed to open file` di JLink | Gunakan path tanpa spasi, atau copy file ke root repo |
+| `invalid e_shentsize in ELF header` | File exportan korup. Salin dari folder workspace Debug |
 | `loadfile` crash di tiarmhex | Gunakan `tiarmobjcopy` untuk generate `.bin`, lalu flash via GDB |
-| `Target does not support this command` saat `monitor erasechip` | Lewati erase manual — perintah `load` di GDB sudah otomatis erase sector yang diperlukan |
-| Port 2331 sudah dipakai | Tambahkan `-port <nomor>` berbeda pada JLinkGDBServer |
-| JLink tidak mengenali file ELF | Konversi dulu ke `.hex` atau `.bin` menggunakan tool TI |
-| GDB `load` gagal — "Transfer rate" tidak muncul | J-Link mungkin belum halt CPU. Tambahkan `monitor halt` sebelum `load` |
-| Script file J-Link tidak bisa run `interface SWD` | Gunakan flag `-if SWD` di command line, jangan di script |
-| `tiarmhex.exe` segmentation fault | File ELF corrupt. Gunakan workspace Debug version atau `tiarmobjcopy` untuk generate `.bin` |
+| Port 2331 sudah dipakai | Ubah port: `PORT=2332 bash scripts/flash.sh` |
+| GDB `load` gagal tanpa "Transfer rate" | Tambahkan `monitor halt` sebelum `load` |
+| `tiarmhex.exe` segmentation fault | File ELF corrupt. Gunakan versi dari workspace Debug |
