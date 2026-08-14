@@ -9,7 +9,7 @@ Flash TI `.out` (ELF) firmware from <strong>MSP Zero Code Studio</strong> to the
 </p>
 
 <p align="center">
-  <a href="https://github.com/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader"><img src="https://img.shields.io/github/license/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader?style=for-the-badge" alt="License"></a>
+  <a href="https://github.com/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader"><img src="https://img.shields.io/github/license/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader?style=for-the-badge&color=blue" alt="License: MIT"></a>
   <a href="https://github.com/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader"><img src="https://img.shields.io/github/v/tag/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader?style=for-the-badge" alt="Tag"></a>
   <a href="https://github.com/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader"><img src="https://img.shields.io/github/last-commit/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader?style=for-the-badge" alt="Last Commit"></a>
   <a href="https://github.com/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader"><img src="https://img.shields.io/github/stars/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader?style=for-the-badge" alt="Stars"></a>
