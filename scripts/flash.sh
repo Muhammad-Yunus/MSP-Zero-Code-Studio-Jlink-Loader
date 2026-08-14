@@ -15,10 +15,9 @@ FIRMWARE_GDB=$(echo "$FIRMWARE_RAW" | sed 's#^/c/#C:/#')
 
 JLINK_PATH=$(cygpath -w "/c/Program Files/SEGGER/JLink_V844/JLinkGDBServer.exe")
 
-# Auto-detect GDB from common locations (PATH > TI ARM GCC bundled with CCS/MSP Zero)
-# NOTE: MSP Zero Code Studio does NOT bundle GDB. TI ARM GCC is included with CCS installs.
+# Auto-detect GDB: PATH first, then common install locations
 _GDB_CANDIDATES=(
-  # TI ARM GCC — bundled with CCS / MSP Zero Code Studio at C:\ti\gcc-arm-none-eabi-*
+  # GNU Arm Embedded Toolchain (installable standalone or via IDE)
   "/c/ti/gcc-arm-none-eabi-*/bin/arm-none-eabi-gdb.exe"
 )
 GDB_PATH=""

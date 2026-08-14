@@ -22,8 +22,7 @@ $ErrorActionPreference = "Stop"
 
 $JLinkPath = "C:\Program Files\SEGGER\JLink_V844\JLinkGDBServer.exe"
 
-# Auto-detect GDB: PATH > TI ARM GCC (bundled with CCS / MSP Zero Code Studio)
-# NOTE: MSP Zero Code Studio does NOT bundle GDB. TI ARM GCC is included with CCS installs.
+# Auto-detect GDB: PATH first, then common install locations
 $Candidates = @(
     (Get-Command arm-none-eabi-gdb -ErrorAction SilentlyContinue).Source,
     "C:\ti\gcc-arm-none-eabi-*/bin/arm-none-eabi-gdb.exe"
@@ -39,7 +38,7 @@ foreach ($cand in $Candidates) {
     }
 }
 if (-not $GdbPath) {
-    Write-Warning "arm-none-eabi-gdb not found. Install GNU ARM Embedded Toolchain (e.g. from TI)."
+    Write-Warning "arm-none-eabi-gdb not found. Install GNU Arm Embedded Toolchain from https://gitlab.arm.com/tooling/gnu-toolchains-for-arm"
     exit 1
 }
 
