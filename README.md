@@ -65,7 +65,16 @@ PORT=2332 bash scripts/flash.sh
 
 ## Firmware: ADC Sample to UART Write
 
-The `firmware/` folder contains a demo firmware from **MSP Zero Code Studio** — the **ADC Sample to UART Write** example project. The firmware is a clean ELF (`.out`) file taken directly from the compiler workspace folder, not the exported version (exported files are usually corrupted due to Unicode replacement characters).
+The `firmware/` folder contains a demo firmware from **MSP Zero Code Studio** — the **ADC Sample to UART Write** example project. The firmware is a clean ELF (`.out`) file taken directly from the compiler workspace, **not** the exported version (exported files are usually corrupted due to Unicode replacement characters):
+
+```
+<PATH_MSP_ZEROCODE_STUDIO>\workspace\zero_code_start_ticlang\Debug\zero_code_start_ticlang.out
+```
+
+Example:
+```
+C:\Users\<username>\guicomposer\runtime\gcruntime.v13\MSPZeroCodeStudio\workspace\zero_code_start_ticlang\Debug\zero_code_start_ticlang.out
+```
 
 This demo reads ADC input and prints the result via UART — ideal for hardware validation before flashing your own firmware.
 
