@@ -16,7 +16,7 @@ How-to flash `.out` files from **MSP Zero Code Studio** (TI Clang toolchain) to 
 | **MCU** | TI MSPM0G3507 (Cortex-M0+, 512KB Flash, 128KB RAM) |
 | **Programmer** | J-Link (SEGGER), connected via SWD (2-pin: SWCLK, SWDIO) |
 
-![WeAct MSPM0G3507 Board](docs/Weact_Studio_MSPM0G3507.png =500)
+<img src="docs/Weact_Studio_MSPM0G3507.png" alt="WeAct MSPM0G3507 Board" width="500">
 
 ---
 
