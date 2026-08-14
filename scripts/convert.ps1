@@ -27,7 +27,7 @@ $ToolchainDir = "C:\Users\Asus\guicomposer\runtime\gcruntime.v13\MSPZeroCodeStud
 $BaseName   = [System.IO.Path]::GetFileNameWithoutExtension($Firmware)
 
 if ($OutFile -eq "") {
-    $OutFile = (Resolve-Path "$PSScriptRoot\..") + "\$BaseName.$Format"
+    $OutFile = (Resolve-Path "$PSScriptRoot\.." -ErrorAction SilentlyContinue).Path + "\$BaseName.$Format"
 }
 
 $TIObjcopy = "$ToolchainDir\tiarmobjcopy.exe"
@@ -40,7 +40,7 @@ if (-not (Test-Path $Firmware)) {
 
 Write-Host "=== Convert $Firmware ===" -ForegroundColor Cyan
 Write-Host "Format : $Format"
-Write-Host "Output : $Output"
+Write-Host "Output : $OutFile"
 Write-Host ""
 
 if ($Format -eq "bin") {
