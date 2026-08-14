@@ -1,8 +1,8 @@
-# MSP Zero Code Studio — Flash `.out` ke MSPM0G3507 via J-Link
+# MSP Zero Code Studio — Flash `.out` to MSPM0G3507 via J-Link
 
 ![WeAct MSPM0G3507 Banner](docs/Weact_Studio_MSPM0G3507_banner.png)
 
-How-to flash file `.out` dari **MSP Zero Code Studio** (TI Clang toolchain) ke chip **MSPM0G3507** menggunakan **J-Link**.
+How-to flash `.out` files from **MSP Zero Code Studio** (TI Clang toolchain) to the **MSPM0G3507** chip using **J-Link**.
 
 **Target Board**: [WeAct Studio MSPM0G3507 Core Board](https://github.com/WeActStudio/WeActStudio.MSPM0G3507CoreBoard/)
 
@@ -10,11 +10,11 @@ How-to flash file `.out` dari **MSP Zero Code Studio** (TI Clang toolchain) ke c
 
 ## Hardware
 
-| Komponen | Spesifikasi |
-|----------|-------------|
+| Component | Specification |
+|-----------|---------------|
 | **Target Board** | WeAct Studio MSPM0G3507 Core Board |
 | **MCU** | TI MSPM0G3507 (Cortex-M0+, 512KB Flash, 128KB RAM) |
-| **Programmer** | J-Link (SEGGER), terhubung via SWD (2-pin: SWCLK, SWDIO) |
+| **Programmer** | J-Link (SEGGER), connected via SWD (2-pin: SWCLK, SWDIO) |
 
 ![WeAct MSPM0G3507 Board](docs/Weact_Studio_MSPM0G3507.png =500)
 
@@ -26,17 +26,17 @@ How-to flash file `.out` dari **MSP Zero Code Studio** (TI Clang toolchain) ke c
 git clone https://github.com/Muhammad-Yunus/MSP-Zero-Code-Studio-Jlink-Loader.git
 cd MSP-Zero-Code-Studio-Jlink-Loader
 
-# Flash firmware default
+# Flash default firmware
 bash scripts/flash.sh
-# Atau PowerShell
+# Or with PowerShell
 .\scripts\flash.ps1
 ```
 
 ---
 
-## Cara Pakai Script
+## Script Usage
 
-Semua script otomatis mendeteksi path toolchain TI, J-Link, dan GDB.
+All scripts automatically detect the TI toolchain, J-Link, and GDB paths.
 
 ### Flash Firmware
 
@@ -46,7 +46,7 @@ bash scripts/flash.sh firmware/my_app.out
 .\scripts\flash.ps1 -Firmware firmware\my_app.out
 ```
 
-### Konversi `.out` ke `.hex` atau `.bin`
+### Convert `.out` to `.hex` or `.bin`
 
 ```powershell
 bash scripts/convert.sh firmware/my_app.out hex
@@ -55,7 +55,7 @@ bash scripts/convert.sh firmware/my_app.out bin
 .\scripts\convert.ps1 -Format bin
 ```
 
-### Ubah Port GDB Server
+### Change GDB Server Port
 
 ```powershell
 PORT=2332 bash scripts/flash.sh
@@ -65,62 +65,62 @@ PORT=2332 bash scripts/flash.sh
 
 ## Firmware: ADC Sample to UART Write
 
-Folder `firmware/` berisi firmware demo dari **MSP Zero Code Studio** — contoh proyek **ADC Sample to UART Write**. Firmware ini adalah file ELF (`.out`) bersih yang diambil langsung dari folder workspace compiler, bukan hasil export (exportan biasanya korup karena byte Unicode replacement character).
+The `firmware/` folder contains a demo firmware from **MSP Zero Code Studio** — the **ADC Sample to UART Write** example project. The firmware is a clean ELF (`.out`) file taken directly from the compiler workspace folder, not the exported version (exported files are usually corrupted due to Unicode replacement characters).
 
-Demo ini menggambarkan cara membaca input ADC dan mengirim hasilnya via UART, cocok untuk validasi hardware sebelum flash firmware sendiri.
+This demo reads ADC input and prints the result via UART — ideal for hardware validation before flashing your own firmware.
 
 ### Dependencies
 
-Untuk menghasilkan firmware `.out` sendiri, pastikan tool berikut sudah terinstall:
+To generate your own `.out` firmware, make sure the following tools are installed:
 
-- **[MSP Zero Code Studio](https://www.ti.com/tool/MSP-ZERO-CODE-STUDIO)** — IDE visual dari TI untuk mem CONFIG dan generate code untuk MCU MSPM0
-- **[J-Link Software](https://www.segger.com/downloads/jlink/)** — Debugger/programmer dari SEGGER (dipakai: **V8.44**)
+- **[MSP Zero Code Studio](https://www.ti.com/tool/MSP-ZERO-CODE-STUDIO)** — TI's visual IDE for configuring and generating code for MSPM0 MCUs
+- **[J-Link Software](https://www.segger.com/downloads/jlink/)** — SEGGER's debugger/programmer (used: **V8.44**)
 
-Dengan kombinasi kedua tool ini, kamu tidak lagi perlu board debugger XDS (LaunchPad) untuk flashing — cukup konek J-Link ke header SWD di board.
+With these two tools combined, you no longer need an XDS debugger board (LaunchPad) for flashing — simply connect J-Link to the SWD header on the board.
 
 ![MSP Zero Code Studio](docs/msp_zero_code_studio.png)
 
 ---
 
-## Prasyarat
+## Prerequisites
 
-| Tool | Lokasi Bawaan |
-|------|--------------|
+| Tool | Default Location |
+|------|-----------------|
 | **J-Link** | `C:\Program Files\SEGGER\JLink_V844\` |
 | **GDB** | STM32CubeIDE `...\tools\bin\arm-none-eabi-gdb.exe` |
 | **TI Tools** | `<PATH_MSP_ZEROCODE_STUDIO>\ti_cgt_arm_llvm\bin\` |
 
-Cari lokasi GDB jika tidak di PATH:
+Find GDB location if not in PATH:
 ```powershell
 where.exe arm-none-eabi-gdb
 ```
 
 ---
 
-## Pengetahuan Penting
+## Important Notes
 
-### Kenapa file `.out` hasil export korup?
+### Why are exported `.out` files corrupted?
 
-File `.out` yang di-export dari MSP Zero Code Studio mengandung byte `0xEF 0xBF 0xBD` (Unicode replacement character) yang membuat header ELF rusak. Gunakan file asli dari folder workspace compiler:
+Files exported from MSP Zero Code Studio contain `0xEF 0xBF 0xBD` bytes (Unicode replacement characters), which corrupt the ELF header. Use the original file from the compiler workspace folder instead:
 
 ```
-<PATH_MSP_ZEROCODE_STUDIO>\workspace\<nama_project>\Debug\<nama_project>.out
+<PATH_MSP_ZEROCODE_STUDIO>\workspace\<project_name>\Debug\<project_name>.out
 ```
 
-Contoh:
+Example:
 ```
-C:\Users\<username>\guicomposer\runtime\gcruntime.v13\MSPZeroCodeStudio\workspace\<nama_project>\Debug\<nama_project>.out
+C:\Users\<username>\guicomposer\runtime\gcruntime.v13\MSPZeroCodeStudio\workspace\<project_name>\Debug\<project_name>.out
 ```
 
 ---
 
 ## Troubleshooting
 
-| Masalah | Solusi |
-|---------|--------|
-| `Failed to open file` di JLink | Gunakan path tanpa spasi, atau copy file ke root repo |
-| `invalid e_shentsize in ELF header` | File exportan korup. Salin dari folder workspace Debug |
-| `loadfile` crash di tiarmhex | Gunakan `tiarmobjcopy` untuk generate `.bin`, lalu flash via GDB |
-| Port 2331 sudah dipakai | Ubah port: `PORT=2332 bash scripts/flash.sh` |
-| GDB `load` gagal tanpa "Transfer rate" | Tambahkan `monitor halt` sebelum `load` |
-| `tiarmhex.exe` segmentation fault | File ELF corrupt. Gunakan versi dari workspace Debug |
+| Problem | Solution |
+|---------|----------|
+| `Failed to open file` in JLink | Use a path without spaces, or copy the file to the repo root |
+| `invalid e_shentsize in ELF header` | Exported file is corrupted. Copy from the workspace Debug folder |
+| `loadfile` crash in tiarmhex | Use `tiarmobjcopy` to generate `.bin`, then flash via GDB |
+| Port 2331 already in use | Change port: `PORT=2332 bash scripts/flash.sh` |
+| GDB `load` fails without "Transfer rate" | Add `monitor halt` before `load` |
+| `tiarmhex.exe` segmentation fault | ELF file is corrupt. Use the workspace Debug version or generate `.bin` with `tiarmobjcopy` |
